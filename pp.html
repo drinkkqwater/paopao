@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/vue"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #area {
+            width: 400px;
+            height: 400px;
+            border: 1px solid black;
+            position: absolute;
+        }
+
+        #redpp {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div id="app-3">
+    <p v-if="seen">现在你看到我了</p>
+    <div id="area">
+        <div id="redpp" :style="{top:redTop + 'px',left:redLeft + 'px'}">
+
+        </div>
+
+    </div>
+</div>
+</body>
+<script>
+    var app3 = new Vue({
+        el: '#app-3',
+        data: {
+            seen: false,
+            redTop: 50,
+            redLeft: 0,
+            RDFlag: 1,
+            RD: function () {
+            },
+            RU: function () {
+            },
+            LU:function () {
+            },
+            LD:function () {
+            }
+        },
+        methods: {
+            runRD: function () {
+                clearInterval(this.LD);
+                let that = this;
+                this.RD = setInterval(function () {
+                    that.redLeft++;
+                    that.redTop++
+
+                }, 30);
+
+            },
+            runRU: function () {
+                clearInterval(this.RD);
+                let that = this
+                this.RU = setInterval(function () {
+                    that.redTop--;
+                    that.redLeft++
+                },30)
+            },
+            runLU:function () {
+                clearInterval(this.RU);
+                let that = this
+                this.LU = setInterval(function () {
+                    that.redLeft--;
+                    that.redTop--
+                },30)
+
+            },
+            runLD:function () {
+                clearInterval(this.LU);
+                let that = this;
+                this.LD = setInterval(function () {
+                    that.redLeft--;
+                    that.redTop++
+                },30)
+            },
+            mousePosition:function () {
+                
+            }
+
+
+        },
+        created: function () {
+            console.log(this.redTop)
+            this.runRD()
+        },
+        watch: {
+            redTop: function (v, old) {
+                console.log('redTopv' + v + 'old' + old);
+                if (v === 350 && this.redLeft < 350) {
+                    this.runRU()
+                }
+                if (v === 0 && this.redLeft < 350){
+                    this.runLD()
+
+                }
+            },
+            redLeft:function (v, old) {
+                console.log('redLeftv' + v + 'old' + old);
+                if (v === 350 && this.redTop < 350){
+                    this.runLU()
+                }
+                if (v === 0 && this.redTop < 350){
+                    this.runRD()
+                }
+            }
+
+        }
+    })
+</script>
+</html>
